@@ -30,5 +30,5 @@ public class Spot {
     private LocalDateTime visitedDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
+
 }
