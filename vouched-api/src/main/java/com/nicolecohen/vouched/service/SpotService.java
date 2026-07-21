@@ -36,7 +36,7 @@ public class SpotService {
 
         Spot spot2 = Spot.builder()
                 .id(UUID.randomUUID())
-                .ownerId('user-002')
+                .ownerId("user-002")
                 .name("Cottiers")
                 .address("31 Hyndland Road, Glasgow")
                 .city("Glasgow")
@@ -83,9 +83,17 @@ public class SpotService {
         }
 
         Spot existingSpot = spots.get(id);
+        //fields that are allowed to be updated
+        existingSpot.setNotes(updatedSpot.getNotes());
+        existingSpot.setPrivacyLevel(updatedSpot.getPrivacyLevel());
+        existingSpot.setVibeTags(updatedSpot.getVibeTags());
+        existingSpot.setVisited(updatedSpot.isVisited());
+        existingSpot.setWantsToVisit(updatedSpot.isWantsToVisit());
+        existingSpot.setVisitedDate(updatedSpot.getVisitedDate());
+        existingSpot.setUpdatedAt(LocalDateTime.now());
 
-
-
+        spots.put(id, existingSpot);
+        return existingSpot;
     }
 
     //DELETE SPOT

@@ -10,5 +10,8 @@ public enum Category {
     GYM,
     GALLERY,
     PARK,
+    MARKET,
+    CINEMA,
+    MUSIC_VENUE,
     OTHER
 }
