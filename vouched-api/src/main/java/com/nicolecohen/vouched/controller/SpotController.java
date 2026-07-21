@@ -1,34 +1,67 @@
 package com.nicolecohen.vouched.controller;
 
+import com.nicolecohen.vouched.exception.AlreadyExistsException;
+import com.nicolecohen.vouched.exception.NotFoundException;
+import com.nicolecohen.vouched.model.Spot;
+import com.nicolecohen.vouched.service.SpotService;
+
+import org.aspectj.weaver.ast.Not;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/spots")
 public class SpotController {
 
+    private final SpotService spotService;
+
+    public SpotController(SpotService spotService){
+        this.spotService = spotService;
+    }
     @GetMapping
-    public List<String> getAllSpots(){
-        return List.of("Cottiers", "Old School House", "Oran Mor");
+    public ResponseEntity<List<Spot>> getAllSpots(){
+        return ResponseEntity.ok(spotService.getAllSpots());
     }
 
-    @GetMapping("/{name}")
-    public String getSpot(@PathVariable String name){
-        return "Spot: " + name;
+    @GetMapping("/{id}")
+    public ResponseEntity<Spot> getSpot(@PathVariable UUID id){
+        try {
+            return ResponseEntity.ok(spotService.getSpot(id));
+        } catch(NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public String createSpot(@RequestBody String spotName){
-        return "Created Spot: " + spotName;
+    public ResponseEntity<Spot> createSpot(@RequestBody Spot spot){
+        try {
+            Spot created = spotService.createSpot(spot);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (AlreadyExistsException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
-    @PutMapping("/{name}")
-    public String updateSpot(@PathVariable String name, @RequestBody String newName){
-        return "Updated " + name + " to " + newName;
+    @PutMapping("/{id}")
+    public ResponseEntity<Spot> updateSpot(@PathVariable UUID id, @RequestBody Spot spot){
+        try{
+            return ResponseEntity.ok(spotService.updateSpot(id, spot));
+        } catch (NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @DeleteMapping("/{name}")
-    public String deleteSpot(@PathVariable String name){
-        return "Deleted spot: " + name;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSpot(@PathVariable UUID id){
+        try {
+            spotService.deleteSpot(id);
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 }

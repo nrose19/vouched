@@ -76,6 +76,24 @@ public class SpotService {
     }
 
     //UPDATE SPOT
+    public Spot updateSpot(UUID id, Spot updatedSpot){
+
+        if(!spots.containsKey(updatedSpot.getId())){
+            throw new NotFoundException("Spot not found with this id: " + id);
+        }
+
+        Spot existingSpot = spots.get(id);
+
+
+
+    }
 
     //DELETE SPOT
+    public void deleteSpot(UUID id){
+        if(!spots.containsKey(id)){
+            throw new NotFoundException("Cannot find spot with this id: "+ id);
+        }
+        spots.remove(id);
+    }
+
 }
