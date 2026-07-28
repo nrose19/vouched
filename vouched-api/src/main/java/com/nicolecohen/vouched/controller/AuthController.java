@@ -32,7 +32,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(){
         //JWT is stateless - logout is handled client-side by removing the token from browser storage
-        //endpoint exists for API completeness 
+        //endpoint exists for API completeness
         return ResponseEntity.noContent().build();
     }
 }
