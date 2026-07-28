@@ -2,7 +2,7 @@ package com.nicolecohen.vouched;
 
 
 import com.nicolecohen.vouched.model.User;
-import com.nicolecohen.vouched.security.JwtFil;
+import com.nicolecohen.vouched.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

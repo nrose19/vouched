@@ -13,7 +13,7 @@ public interface SpotRepository extends JpaRepository<Spot, UUID> {
 
     List<Spot> findByCity(String city);
 
-    List<Spot> findByOwner(String ownerId);
+    List<Spot> findByOwnerId(String ownerId);
 
     List<Spot> findByCityAndCategory(String city, String category);
 }
