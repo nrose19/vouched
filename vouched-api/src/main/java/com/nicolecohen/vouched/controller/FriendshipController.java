@@ -50,7 +50,7 @@ public class FriendshipController {
         return ResponseEntity.ok(friendshipService.getMyFriends(currentUserId));
     }
 
-    @GetMapping
+    @GetMapping("/pending")
     public ResponseEntity<List<FriendshipResponse>> getPendingRequests(){
         UUID currentUserId = currentUserService.getCurrentUserId();
         return ResponseEntity.ok(friendshipService.getPendingRequests(currentUserId));
