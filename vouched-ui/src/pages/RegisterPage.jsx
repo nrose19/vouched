@@ -39,7 +39,7 @@ function RegisterPage(){
     return(
         <div className="min-h-screen flex items-center justify-center bg-paper-light">
             <div className="bg-paper rounded-2xl p-8 w-full max-w-sm">
-                <h1 className="font-logo text-4xl text-center mb-6">Vouched</h1>
+                <h1 className="text-rosewood font-logo text-5xl text-center mb-6">Vouched</h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <input
@@ -73,6 +73,7 @@ function RegisterPage(){
                     <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
                         Sign up!
                     </button>
+                    <a href="/login" className="text-center">Already a user? Login now.</a>
                 </form>
             </div>
         </div>

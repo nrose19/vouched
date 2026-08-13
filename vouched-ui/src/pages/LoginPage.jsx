@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
+import loginBg from "../assets/dual_city_bg_image.jpg";
 
 function LoginPage(){
     const navigate = useNavigate();
@@ -32,9 +33,10 @@ function LoginPage(){
     }
 
     return(
-        <div className="min-h-screen flex items-center justify-center bg-paper-light">
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${loginBg})`}}>
+        <div className="min-h-screen flex items-center justify-center">
             <div className="bg-paper rounded-2xl p-8 w-full max-w-sm">
-                <h1 className="font-logo text-4xl text-center mb-6">Vouched</h1>
+                <h1 className="text-rosewood font-logo text-5xl text-center mb-6">Vouched</h1>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <input 
@@ -56,13 +58,15 @@ function LoginPage(){
                         className="border rounded-lg px-3 py-2"
                     />
                     {error && <p className="text-brick text-sm">{error}</p>}
+                    <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
+                        Login
+                    </button>
+                    <a href="/register" className="text-center">Not a user? Register now.</a>
                 </form>
-                <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
-                    Login
-                </button>
-                <a href="/register">Not a user? Register now.</a>
+                
             </div>
         </div>
+    </div>
     )
 
 }

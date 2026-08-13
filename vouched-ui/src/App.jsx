@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
-import { BrowserRouter, Route } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import HomePage from './pages/HomePage'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
+import ProtectedRoute from './routes/ProtectedRoutes'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,8 +14,9 @@ function App() {
     <Routes>
       <Route path='/login' element={<LoginPage/>}/>
       <Route path='/register' element={<RegisterPage/>} />
-      //current catch all for anything that isn't login/register to reroute
-      <Route path='*' element={<Navigate to='/login'/>} />
+      {/* current catch all for anything that isn't login/register to reroute */}
+      <Route path="*" element={<LoginPage/>}/>
+      <Route path='/' element={<ProtectedRoute><HomePage/></ProtectedRoute>} />
     </Routes>
    </BrowserRouter>
   )
