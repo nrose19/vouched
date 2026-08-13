@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
+import registerBg from "../assets/dual_city_bg.jpg";
 
 function RegisterPage(){
     const navigate = useNavigate();
@@ -37,44 +38,46 @@ function RegisterPage(){
 
 
     return(
-        <div className="min-h-screen flex items-center justify-center bg-paper-light">
-            <div className="bg-paper rounded-2xl p-8 w-full max-w-sm">
-                <h1 className="text-rosewood font-logo text-5xl text-center mb-6">Vouched</h1>
+        <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${registerBg})`}}>
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="bg-paper-light/90 rounded-2xl p-8 w-full max-w-sm">
+                    <h1 className="text-rosewood font-logo text-5xl text-center mb-6">Vouched</h1>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <input
-                        name="displayName"
-                        type="text"
-                        placeholder="Display name"
-                        //value and onChange here
-                        value={formData.displayName}
-                        onChange={handleChange}
-                        className="border rounded-lg px-3 py-2"
-                    />
-                    <input 
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        //value and onChange here
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="border rounded-lg px-3 py-2"
-                    />
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        //value and onChange here
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="border rounded-lg px-3 py-2"
-                    />
-                    {error && <p className="text-brick text-sm">{error}</p>}
-                    <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
-                        Sign up!
-                    </button>
-                    <a href="/login" className="text-center">Already a user? Login now.</a>
-                </form>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                        <input
+                            name="displayName"
+                            type="text"
+                            placeholder="Display name"
+                            //value and onChange here
+                            value={formData.displayName}
+                            onChange={handleChange}
+                            className="border rounded-lg px-3 py-2"
+                        />
+                        <input 
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            //value and onChange here
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="border rounded-lg px-3 py-2"
+                        />
+                        <input
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            //value and onChange here
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="border rounded-lg px-3 py-2"
+                        />
+                        {error && <p className="text-brick text-sm">{error}</p>}
+                        <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
+                            Sign up!
+                        </button>
+                        <a href="/login" className="text-center">Already a user? Login now.</a>
+                    </form>
+                </div>
             </div>
         </div>
     );

@@ -2,6 +2,10 @@ import { NavLink, Outlet } from "react-router-dom";
 
 const navItems = [
     {to: "/", lab: "Home"},
+    {to: "/explore", lab: "Explore"},
+    {to: "/friends", lab: "Friends"},
+    {to: "/profile", lab: "Profile"},
+    {to: "/add", lab: "Add"},
 ];
 
 function Layout(){
