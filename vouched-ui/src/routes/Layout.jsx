@@ -10,11 +10,17 @@ const navItems = [
 
 function Layout(){
     return (
-        <div className="min-h-screen bg-paper-light pb-20">
+        <div className="min-h-screen bg-paper-light pt-16">
             <Outlet />
 
-            <nav className="fixed bottom-0 left-0 right-0 bg-paper flex justify-around py-3">
-
+            <nav className="fixed top-0 left-0 right-0 bg-paper flex justify-around py-4 ht-16">
+                <ul>
+                    {navItems.map(item =>
+                        <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+                            {item.lab}
+                        </NavLink>
+                    )}
+                </ul>
             </nav>
         </div>
     )
