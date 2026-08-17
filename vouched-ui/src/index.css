@@ -16,3 +16,15 @@
 body {
   @apply bg-paper-light text-ink font-sans;
 }
+
+button {
+  cursor: pointer;
+}
+
+input{
+  cursor: pointer;
+}
+
+select{
+  cursor: pointer;
+}
