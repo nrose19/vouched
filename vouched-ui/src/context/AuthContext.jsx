@@ -19,7 +19,7 @@ export function AuthProvider({ children }){
     //login
     function login(userData){
         localStorage.setItem('token', userData.token);
-         // TODO 2: also save the full userData object, stringified, under its own key
+         // save the full userData object, stringified, under its own key
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
     }
@@ -27,7 +27,7 @@ export function AuthProvider({ children }){
     //logout
     function logout(){
         localStorage.removeItem('token');
-        // TODO 3: also remove the full user object from localStorage
+        // remove the full user object from localStorage
         localStorage.removeItem('user');
         setUser(null);
     }
