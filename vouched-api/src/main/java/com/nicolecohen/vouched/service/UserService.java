@@ -10,6 +10,9 @@ import com.nicolecohen.vouched.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -54,5 +57,15 @@ public class UserService {
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token, user.getDisplayName(),user.getEmail());
+    }
+
+    public List<UserSearchResponse> searchUsers(String query){
+        return userRepository.searchUser(query)
+                .stream()
+                .map(user -> new UserSearchResponse(
+                        user.getId(),
+                        user.getDisplayName()
+                ))
+                .collect(Collectors.toList());
     }
 }
