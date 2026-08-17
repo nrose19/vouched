@@ -5,6 +5,7 @@ import com.nicolecohen.vouched.exception.NotFoundException;
 import com.nicolecohen.vouched.model.Spot;
 import com.nicolecohen.vouched.service.SpotService;
 
+import org.springframework.security.core.Authentication;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,8 @@ public class SpotController {
     }
 
     @PostMapping
-    public ResponseEntity<Spot> createSpot(@RequestBody Spot spot){
+    public ResponseEntity<Spot> createSpot(@RequestBody Spot spot, Authentication authentication){
+        spot.setOwnerId(authentication.getName());
         try {
             Spot created = spotService.createSpot(spot);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
