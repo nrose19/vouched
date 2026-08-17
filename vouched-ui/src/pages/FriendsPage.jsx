@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getMyFriends, getPendingRequests, acceptRequest, declineRequest, removeFriend } from "../api/friendships";
 
 
-//simple template for testing
+
 function FriendsPage() {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -32,10 +32,12 @@ function FriendsPage() {
 
   async function handleAccept(friendshipId){
     try{
-      await acceptRequest(friendshipId);
+      const result = await acceptRequest(friendshipId);
       //filter friendship id out of pending requests
-      
+      setPendingRequests(prev => prev.filter(request => request.friendshipId !== friendshipId));
       //add this new friend to friends
+      setFriends(prev => [...prev, result.data]);
+
     } catch (err) {
       setError("Could not accept request.");
     }
@@ -46,6 +48,7 @@ function FriendsPage() {
     try{
       await declineRequest(friendshipId);
       //filter friendship id out of pending requests
+      setPendingRequests(prev => prev.filter(request => request.friendshipId !== friendshipId));
 
     } catch (err){
       setError("Could not decline request.");
