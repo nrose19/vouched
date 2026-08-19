@@ -3,6 +3,8 @@ package com.nicolecohen.vouched.repository;
 import com.nicolecohen.vouched.model.Spot;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +18,14 @@ public interface SpotRepository extends JpaRepository<Spot, UUID> {
     List<Spot> findByOwnerId(String ownerId);
 
     List<Spot> findByCityAndCategory(String city, String category);
+
+    @Query("""
+        SELECT s.ownerId, COUNT(s)
+        FROM Spot s
+        WHERE s.ownerId IN :ownerIds
+        GROUP BY s.ownerId
+    """)
+    List<Object[]> findSpotCountsByOwnerIds(
+            @Param("ownerIds") List<String> ownerIds
+    );
 }

@@ -41,7 +41,7 @@ function RegisterPage(){
         <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${registerBg})`}}>
             <div className="min-h-screen flex items-center justify-center">
                 <div className="bg-paper-light/90 rounded-2xl p-8 w-full max-w-sm">
-                    <h1 className="text-rosewood font-logo text-5xl text-center mb-6">Vouched</h1>
+                    <h1 className="text-rosewood text-5xl">Vouched</h1>
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                         <input

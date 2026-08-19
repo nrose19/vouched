@@ -9,7 +9,8 @@ function ExplorePage() {
   const [spots, setSpots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchMode, setSearchMode] = useState("spots"); //spots or friends -- alter the render of the search 
+  const [searchMode, setSearchMode] = useState("spots"); //spots or friends -- alter the render of the search
+  const [viewMode, setViewMode] = useState("list") // spot/friends list view vs map view 
   const [searchTerm, setSearchTerm] = useState(""); //shared by both modes
   const [friendResults, setFriendResults] = useState([]);
   const [sentRequests, setSentRequests] = useState(new Set());
@@ -64,50 +65,84 @@ function ExplorePage() {
   }
 
   return(
-    <div className="p-8">
-      <h1 className="font-display text-3xl mb-4">Let's explore your city together!</h1>
+    <div className="p-15">
+      <h1 className="text-5xl">Let's explore your city together!</h1>
 
-      {/* search mode/button for each mode */}
-      <div className="flex gap-2 mb-4">
-        <button type="button" onClick={() => setSearchMode("spots")} className={`cursor-pointer px-4 py-2 rounded-lg ${searchMode === "spots" ? "bg-rosewood text-paper-light" : "bg-paper"}`}>
-          Spots
-        </button>
-        <button type="button" onClick={() => setSearchMode("friends")} className={`cursor-pointer px-4 py-2 rounded-lg ${searchMode === "friends" ? "bg-rosewood text-paper-light" : "bg-paper"}`}>
-          Friends
+      {/* list/map view toggle */}
+      <div className="flex items-center justify-between mb-2">
+        {/* search mode/button for each mode */}
+        <div className="flex gap-2 mb-4">
+          <button type="button" onClick={() => setSearchMode("spots")} className={`cursor-pointer px-4 py-2 rounded-lg ${searchMode === "spots" ? "bg-rosewood text-paper-light" : "bg-paper"}`}>
+            Spots
+          </button>
+          <button type="button" onClick={() => setSearchMode("friends")} className={`cursor-pointer px-4 py-2 rounded-lg ${searchMode === "friends" ? "bg-rosewood text-paper-light" : "bg-paper"}`}>
+            Friends
+          </button>
+        </div>
+
+        {/* mapview */}
+        <button 
+        type="button"
+        onClick={() => setViewMode(prev => prev ==="list" ? "map" : "list")}
+        className={`font-display ${viewMode === "map" ? "text-rosewood font-bold" : "text-ink"}`}
+        >
+          Map View
         </button>
       </div>
+      
 
-      <form onSubmit={handleSearch} className="flex gap-2 mb-4">
+      <form onSubmit={handleSearch} className="flex gap-2 mb-2">
         <input 
           type="text"
           placeholder={searchMode === "spots" ? "Search spots..." : "Search by name or email..."}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border rounded-lg px-3 py-2 flex-1"
+          className="border rounded-lg px-3 py-2 w-full bg-paper"
         />
         <button type="submit" className="bg-rosewood text-paper-light px-4 rounded-lg cursor-pointer">Search</button>
       </form>
         
       {loading && <p>Loading...</p>}
       {error && <p className="text-brick text-sm">{error}</p>}
-      {!loading && !error && searchMode === "spots" && (
+
+      {/* map view */}
+      {!loading && !error && viewMode === "map" && searchMode === "spots" && (
         <div>
+          Map placeholder
+        </div>
+      )}
+
+      {/* list view + spots view  */}
+      {!loading && !error && viewMode === "list" && searchMode === "spots" && (
+        <div className="grid grid-cols-3 gap-4 mt-6">
           {filteredSpots.map(spot => <SpotCard key={spot.id} spot={spot} />)}
         </div>
       )}
 
-      {!loading && !error && searchMode === "friends" && (
-        friendResults.map(user => (
-          <div key={user.id} className="flex justify-between items-center bg-paper rounded-lg p-3 mb-2">
-            <span>{user.displayName}</span>
-            <button
-              onClick={() => handleSendRequest(user.id)}
-              className={`px-3 py-1 rounded-lg text-paper-light cursor-pointer ${sentRequests.has(user.id) ? "bg-stone" : "bg-moss"}`}
-            >
-              {sentRequests.has(user.id) ? "Request sent" : "Add friend"}
-            </button>
-          </div>
-        ))
+      {/* list view + friends view  */}
+      {!loading && !error && viewMode=== "list" && searchMode === "friends" && (
+        <div className="flex flex-col gap-3">
+          {friendResults.map(user => (
+            <div key={user.id} className="flex justify-between items-center bg-paper rounded-lg p-4 mb-2">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-rosewood text-paper-light flex items-center justify-center font-display">
+                  {user.displayName.charAt(0).toUpperCase()}
+                </div>
+                <span className="font-display">{user.displayName}</span>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-stone">{user.spotCount} spots saved</span>
+                <button
+                  onClick={() => handleSendRequest(user.id)}
+                  className={`px-3 py-1 rounded-lg text-paper-light cursor-pointer ${sentRequests.has(user.id) ? "bg-stone" : "bg-moss"}`}
+                >
+                  {sentRequests.has(user.id) ? "Request sent" : "Add friend"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   )

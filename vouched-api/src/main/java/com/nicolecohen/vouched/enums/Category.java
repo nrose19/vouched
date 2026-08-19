@@ -5,6 +5,7 @@ public enum Category {
     RESTAURANT,
     BAR,
     PUB,
+    WINE_BAR,
     SALON,
     SHOP,
     GYM,

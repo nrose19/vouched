@@ -4,6 +4,7 @@ import com.nicolecohen.vouched.dto.*;
 import com.nicolecohen.vouched.enums.Role;
 import com.nicolecohen.vouched.exception.*;
 import com.nicolecohen.vouched.model.User;
+import com.nicolecohen.vouched.repository.SpotRepository;
 import com.nicolecohen.vouched.repository.UserRepository;
 import com.nicolecohen.vouched.security.JwtUtil;
 
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,11 +21,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final SpotRepository spotRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, SpotRepository spotRepository){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.spotRepository = spotRepository;
     }
 
     public AuthResponse register(RegisterRequest request){
@@ -59,12 +64,35 @@ public class UserService {
         return new AuthResponse(token, user.getDisplayName(),user.getEmail());
     }
 
+
     public List<UserSearchResponse> searchUsers(String query){
-        return userRepository.searchUser(query)
-                .stream()
-                .map(user -> new UserSearchResponse(
-                        user.getId(),
-                        user.getDisplayName()
+        //find all users matching the search term
+        List<User> users = userRepository.searchUsers(query);
+
+        //extract user's ID as string -- store spot.owner id
+        List<String> ownerIds = users.stream()
+                .map(u -> u.getId().toString())
+                .collect(Collectors.toList());
+
+        //one database query to count spots for ALL users at once
+        //avoids N+1 problem - one query total, not per use
+        List<Object[]> rawCounts = spotRepository
+                .findSpotCountsByOwnerIds(ownerIds);
+
+        //convert raw results into a map for easy lookup
+        //e.g. row[0] is ownerId, row[1] is count
+        Map<String, Long> countMap = rawCounts.stream()
+                .collect(Collectors.toMap(
+                        row -> (String) row[0],
+                        row -> (Long) row[1]
+                ));
+
+        //response
+        return users.stream()
+                .map(u -> new UserSearchResponse(
+                        u.getId(),
+                        u.getDisplayName(),
+                        countMap.getOrDefault(u.getId().toString(), 0L)
                 ))
                 .collect(Collectors.toList());
     }

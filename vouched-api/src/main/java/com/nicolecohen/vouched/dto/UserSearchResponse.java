@@ -10,5 +10,5 @@ import java.util.UUID;
 public class UserSearchResponse {
     private UUID id;
     private String displayName;
-
+    private Long spotCount;
 }

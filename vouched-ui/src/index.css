@@ -28,3 +28,9 @@ input{
 select{
   cursor: pointer;
 }
+
+h1{
+  text-align: center;
+  font-family: var(--font-logo);
+  margin-bottom: 3rem;
+}

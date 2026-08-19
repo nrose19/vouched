@@ -57,7 +57,7 @@ function FriendsPage() {
 
   return(
     <div className="p-8">
-      <h1 className="font-display text-3xl mb-4">Friendships</h1>
+      <h1 className="text-5xl">Friendships</h1>
 
       {loading && <p>Loading...</p>}
 

@@ -5,10 +5,12 @@ function SpotCard({spot}){
         FRIENDS: "bg-moss",
     }
     return(
-        <div className="bg-paper rounded-xl p-4 mb-3">
-            <h1 className="font-logo text-center">{spot.name}</h1>
-
+        <div className="bg-rosewood rounded-xl p-4 mb-3">
+            <h2 className="font-logo text-center text-2xl">{spot.name}</h2>
             <h3>{spot.category}</h3>
+            <p>
+                {spot.notes}
+            </p>
             <ul>
                 {spot.vibeTags.join(', ')}
             </ul>

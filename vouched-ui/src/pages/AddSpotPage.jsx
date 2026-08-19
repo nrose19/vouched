@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createSpot } from "../api/spots";
 
 //following same as category enum in backend
-const categories = ["CAFE", "RESTAURANT", "BAR", "PUB", "SALON", "SHOP", "GYM", "GALLERY", "PARK", "MARKET", "CINEMA", "MUSIC_VENUE", "OTHER"];
+const categories = ["CAFE", "RESTAURANT", "BAR", "PUB", "WINE_BAR", "SALON", "SHOP", "GYM", "GALLERY", "PARK", "MARKET", "CINEMA", "MUSIC_VENUE", "OTHER"];
 
 
 //simple template for testing
@@ -49,7 +49,7 @@ function AddSpotPage() {
 
   return(
     <div className="p-8">
-      <h1 className="font-display text-3xl mb-4">Find a cool spot? Add it now</h1>
+      <h1 className="text-5xl">Find a cool spot?</h1>
       
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} className="border rounded-lg px-3 py-2" />

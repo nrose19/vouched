@@ -6,6 +6,7 @@ import com.nicolecohen.vouched.exception.*;
 import com.nicolecohen.vouched.model.Spot;
 import com.nicolecohen.vouched.repository.SpotRepository;
 
+import com.nicolecohen.vouched.security.CurrentUserService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,9 +16,11 @@ import java.util.*;
 public class SpotService {
 
     private final SpotRepository spotRepository;
+    private final CurrentUserService currentUserService;
 
-    public SpotService(SpotRepository spotRepository){
+    public SpotService(SpotRepository spotRepository, CurrentUserService currentUserService){
         this.spotRepository = spotRepository;
+        this.currentUserService = currentUserService;
     }
 
     public List<Spot> getAllSpots(){
@@ -33,6 +36,11 @@ public class SpotService {
 
     //CREATE SPOT
     public  Spot createSpot(Spot spot){
+        String ownerId = currentUserService
+                .getCurrentUser()
+                .getId()
+                .toString();
+        spot.setOwnerId(ownerId);
         return spotRepository.save(spot);
     }
 
