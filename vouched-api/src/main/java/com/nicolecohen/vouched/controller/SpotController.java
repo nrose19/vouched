@@ -38,14 +38,9 @@ public class SpotController {
     }
 
     @PostMapping
-    public ResponseEntity<Spot> createSpot(@RequestBody Spot spot, Authentication authentication){
-        spot.setOwnerId(authentication.getName());
-        try {
-            Spot created = spotService.createSpot(spot);
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        } catch (AlreadyExistsException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    public ResponseEntity<Spot> createSpot(@RequestBody Spot spot) {
+        Spot created = spotService.createSpot(spot);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")

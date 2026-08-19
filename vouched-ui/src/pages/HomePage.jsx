@@ -61,7 +61,7 @@ function HomePage(){
                 </div>
 
                 {/* map placeholder */}
-                <div className="bg-paper rounded-xl flex items-center justify-between text-stone font-sans">
+                <div className="bg-sage rounded-xl flex items-center justify-between text-stone font-sans">
                     static map
                 </div>
 

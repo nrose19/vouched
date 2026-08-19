@@ -23,8 +23,15 @@ public class SpotService {
         this.currentUserService = currentUserService;
     }
 
-    public List<Spot> getAllSpots(){
-        return spotRepository.findAll();
+    public List<Spot> getAllSpots() {
+        String currentUserId = currentUserService
+                .getCurrentUser()
+                .getId()
+                .toString();
+        return spotRepository.findByOwnerIdOrPrivacyLevelIn(
+                currentUserId,
+                List.of(PrivacyLevel.FRIENDS, PrivacyLevel.COMMUNITY)
+        );
     }
 
     public Spot getSpot(UUID id){

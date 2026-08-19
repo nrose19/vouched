@@ -46,7 +46,7 @@ function ExplorePage() {
     //find if search mode is friends or not
     if (searchMode === "friends"){
       try{
-        const result = await searchUsers(searchTerm);
+        const result = await searchUser(searchTerm);
         setFriendResults(result.data);
       } catch (err){
         setError("Could not search users.");

@@ -1,5 +1,6 @@
 package com.nicolecohen.vouched.repository;
 
+import com.nicolecohen.vouched.enums.PrivacyLevel;
 import com.nicolecohen.vouched.model.Spot;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +28,10 @@ public interface SpotRepository extends JpaRepository<Spot, UUID> {
     """)
     List<Object[]> findSpotCountsByOwnerIds(
             @Param("ownerIds") List<String> ownerIds
+    );
+
+    List<Spot> findByOwnerIdOrPrivacyLevelIn(
+            String ownerId,
+            List<PrivacyLevel> privacyLevels
     );
 }
