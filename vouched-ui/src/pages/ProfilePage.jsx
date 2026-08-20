@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getSpots } from "../api/spots";
 import { getMyFriends } from "../api/friendships";
-import SpotCard from "../components/SpotCard";
 
 
 
@@ -17,7 +17,10 @@ function ProfilePage() {
   useEffect(() => {
     async function fetchData() {
       try{
-        //fetch getSpots() and getMyFriends()
+        const spotResults = await getSpots();
+        const friendResults = await getMyFriends();
+        setSpots(spotResults.data);
+        setFriends(friendResults.data);
       } catch (err){
         setError("Could not load profile data.")
       } finally {
@@ -27,13 +30,6 @@ function ProfilePage() {
     fetchData();
   }, [])
 
-  const mySpots = spots.filter(spot => spot.ownerId === user.email);
-    //recent spots (up to 5)
-    const myRecentSpots = [...mySpots]
-        .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0,5);
-
-  //TODO friendsSpots 
 
 
   return(
@@ -41,40 +37,26 @@ function ProfilePage() {
       {/* Banner — its own block now, fixed height, no longer wrapping the avatar */}
       <div className="h-55 -mx-6 -mt-6" style={{ background: "linear-gradient(to bottom, var(--color-paper), var(--color-rosewood))" }} />
 
-      {/* Avatar + name — sits below the banner, pulled up slightly to overlap just the bottom edge */}
-      <div className="flex items-end gap-4 px-6 -mt-10 relative z-10 mb-2">
-        <div className="w-35 h-35 rounded-full bg-sage text-paper-light flex items-center justify-center font-display text-4xl border-4 border-paper-light">
-          {user.displayName.charAt(0).toUpperCase()}
+      <div className="flex items-end justify-between px-6 -mt-10 relative z-10 mb-2">
+        <div className="flex items-end gap-4">
+          <div className="w-35 h-35 rounded-full bg-sage text-paper-light flex items-center justify-center font-display text-4xl border-4 border-paper-light">
+            {user.displayName.charAt(0).toUpperCase()}
+          </div>
+          <h2 className="font-logo text-6xl text-ink mb-6">{user.displayName}</h2>
         </div>
-        <h2 className="font-logo text-6xl text-ink mb-6">{user.displayName}</h2>
-      </div>
 
+        <div className="flex gap-6 font-display mb-6">
+          <NavLink to="/profile/spots" end className={({ isActive }) => isActive ? "text-rosewood" : "text-ink"}>My Spots</NavLink>
+          <NavLink to="/profile/following" className={({ isActive }) => isActive ? "text-rosewood" : "text-ink"}>Friends</NavLink>
+          <NavLink to="/profile/map" className={({ isActive }) => isActive ? "text-rosewood" : "text-ink"}>Map View</NavLink>
+        </div>
+      </div>
+        
       {loading && <p>Loading...</p>}
       {error && <p className="text-brick text-sm">{error}</p>}
+      
+      {!loading && !error && <Outlet context={{ spots, following: friends, user }}/>}
 
-      {!loading && !error && (
-        <div className="grid grid-cols-[1fr_1fr] gap-6 mt-20">
-          <div className="bg-sage rounded-xl flex items-center justify-center text-stone font-sans h-64">
-            map
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <div>
-              <h2 className="font-display text-rosewood mb-2">My most recent spots:</h2>
-              <div className="grid grid-cols-3 gap-2">
-                {/* TODO: map first few of mySpots (consider .slice like HomePage's recentSpots) */}
-                {myRecentSpots.map(spot => <SpotCard key={spot.id} spot={spot} />)}
-              </div>
-            </div>
-            <div>
-              <h2 className="font-display text-rosewood mb-2">Friends recent spots:</h2>
-              <div className="grid grid-cols-3 gap-2">
-                {/* TODO: map first few of friendsSpots */}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 

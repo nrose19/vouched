@@ -41,7 +41,7 @@ function HomePage(){
             <h1 className="text-rosewood text-8xl">Vouched</h1>
             
             {/* three separate columns holding filter sidebar, recent spots, and map */}
-            <div className="grid grid-cols-[150px_320px_1fr] gap-4">
+            <div className="grid grid-cols-[150px_320px_1fr] gap-4 h-full">
                 {/* filtering sidebar - placeholder currently */}
                 <div className="bg-paper rounded-xl flex items-center justify-center py-6">
                     <span className="[writing-mode:vertical-rl] rotate-180 font-sans text-sm text-ink">Quick Spot Filter/City Switcher</span>
@@ -49,7 +49,7 @@ function HomePage(){
                 
 
                 {/* recent spots, middle section of page */}
-                <div className="bg-paper rounded-xl p-4 max-h-150 overflow-y-auto">
+                <div className="bg-paper rounded-xl p-4 max-h-150 overflow-y-auto h-full">
                     <h2 className="font-display text-lg mb-3">Recent Spots</h2>
                     {loading && <p>Loading...</p>}
                     {error && <p>{error}</p>}

@@ -40,6 +40,9 @@ public class Spot {
 
     //JPA default behavior
     private String address;
+    //open street map API implementation
+    private Double latitude;
+    private Double longitude;
 
     @Column(length = 500)
     private String notes;

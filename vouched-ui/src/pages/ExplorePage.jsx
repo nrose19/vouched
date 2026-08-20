@@ -114,7 +114,7 @@ function ExplorePage() {
 
       {/* list view + spots view  */}
       {!loading && !error && viewMode === "list" && searchMode === "spots" && (
-        <div className="grid grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-4 gap-4 mt-6">
           {filteredSpots.map(spot => <SpotCard key={spot.id} spot={spot} />)}
         </div>
       )}

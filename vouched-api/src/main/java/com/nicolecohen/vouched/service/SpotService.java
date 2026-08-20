@@ -17,10 +17,12 @@ public class SpotService {
 
     private final SpotRepository spotRepository;
     private final CurrentUserService currentUserService;
+    private final GeocodingService geocodingService;
 
-    public SpotService(SpotRepository spotRepository, CurrentUserService currentUserService){
+    public SpotService(SpotRepository spotRepository, CurrentUserService currentUserService, GeocodingService geocodingService){
         this.spotRepository = spotRepository;
         this.currentUserService = currentUserService;
+        this.geocodingService = geocodingService;
     }
 
     public List<Spot> getAllSpots() {
@@ -48,6 +50,14 @@ public class SpotService {
                 .getId()
                 .toString();
         spot.setOwnerId(ownerId);
+        if(spot.getAddress() != null && !spot.getAddress().isBlank()){
+            double[] coordinates = geocodingService
+                    .geocodeAddress(spot.getAddress());
+            if(coordinates != null) {
+                spot.setLatitude(coordinates[0]);
+                spot.setLongitude(coordinates[1]);
+            }
+        }
         return spotRepository.save(spot);
     }
 

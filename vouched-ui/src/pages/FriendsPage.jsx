@@ -1,91 +1,102 @@
-import { useState, useEffect } from "react";
-import { getMyFriends, getPendingRequests, acceptRequest, declineRequest, removeFriend } from "../api/friendships";
+import { useState, useEffect, useRef } from "react";
+import { getSpots } from "../api/spots";
+import { getMyFriends } from "../api/friendships";
+import { useAuth } from "../context/AuthContext";
+import SpotCard from "../components/SpotCard";
 
 
+function FriendsPage(){
+    const {user} = useAuth();
+    const [spots, setSpots] = useState([]);
+    const [friends, setFriends] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [viewMode, setViewMode] = useState("list"); //list or map option
 
-function FriendsPage() {
-  const [pendingRequests, setPendingRequests] = useState([]);
-  const [friends, setFriends] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+    useEffect(() =>{
+        async function fetchData(){
+            try{
+                const spotResult = await getSpots();
+                const friendResults = await getMyFriends();
+                setFriends(friendResults.data);
+                setSpots(spotResult.data);
+            } catch (err){
+                setError('Unable to find spots.');
+            } finally{
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
 
-  useEffect(() => {
-    async function fetchData(){
-      try{
-        //call both getPending and getFriends, set both peices of state from the two responses
-        const pending = await getPendingRequests();
-        const response = await getMyFriends();
 
-        setPendingRequests(pending.data);
-        setFriends(response.data);
-        
-      } catch (err){
-        setError("Could not load friendship data");
-      } finally {
-        setLoading(false);
-      }
+    const friendIds = new Set(friends.map(f => f.friendUserId));
+    const friendsSpots = spots.filter(spot => friendIds.has(spot.ownerId));
 
+
+    //group filtered spots by category 
+    const groupedSpots = friendsSpots.reduce((groups, spot) => {
+        const category = spot.category;
+
+        if(!groups[category]) {
+            groups[category] = [];
+        }
+
+        groups[category].push(spot);
+
+        return groups;
+    }, {});
+    
+            
+    //scroll feature
+    const myScrollRef = useRef(null);
+    const friendsScrollRef = useRef(null);
+
+    function scrollRight(ref){
+        ref.current?.scrollBy({ left: 300, behavior: "smooth"})
     }
-    fetchData();
-  }, [])
 
-
-  async function handleAccept(friendshipId){
-    try{
-      const result = await acceptRequest(friendshipId);
-      //filter friendship id out of pending requests
-      setPendingRequests(prev => prev.filter(request => request.friendshipId !== friendshipId));
-      //add this new friend to friends
-      setFriends(prev => [...prev, result.data]);
-
-    } catch (err) {
-      setError("Could not accept request.");
-    }
-  }
-
-
-  async function handleDecline(friendshipId){
-    try{
-      await declineRequest(friendshipId);
-      //filter friendship id out of pending requests
-      setPendingRequests(prev => prev.filter(request => request.friendshipId !== friendshipId));
-
-    } catch (err){
-      setError("Could not decline request.");
-    }
-  }
-
-  return(
-    <div className="p-8">
-      <h1 className="text-5xl">Friendships</h1>
-
-      {loading && <p>Loading...</p>}
-
-      {error && <p className="text-brick text-sm">{error}</p>}
-
-      {!loading && !error && (
-        <>
-          <h2 className="font-display text-xl mb-2">Pending requests</h2>
-          {pendingRequests.map(request => (
-            <div key={request.friendshipId} className="flex justify-between items-center bg-paper rounded-lg p-3 mb-2">
-              <span>{request.friendDisplayName}</span>
-              <div>
-                <button onClick={() => handleAccept(request.friendshipId)} className="bg-moss text-paper-light px-3 py-1 rounded-lg mr-2">Accept</button>
-                <button onClick={() => handleDecline(request.friendshipId)} className="bg-brick text-paper-light px-3 py-1 rounded-lg">Decline</button>
-              </div>
+    return(
+        <div className="p-8">
+            <div className="flex items-center justify-between mb-6">
+                <h1 className="text-5xl text-rosewood">My Friends Spots</h1>
+                <button
+                    type="button"
+                    onClick={() => setViewMode(prev => prev === "list" ? "map" : "list")}
+                    className={`font-display ${viewMode === "map" ? "text-rosewood font-bold" : "text-ink"}`}
+                >
+                    Map View
+                </button>
             </div>
-          ))}
 
-          <h2 className="font-display text-xl mb-2 mt-6">Friends</h2>
-          {friends.map(friend => (
-            <div key={friend.friendshipId} className="bg-paper rounded-lg p-3 mb-2">
-              {friend.friendDisplayName}
-            </div>
-          ))}
-        </>
-      )}
-    </div>
-  )
+            {loading && <p>Loading...</p>}
+            {error && <p className="text-brick text-sm">{error}</p>}
 
+            {!loading && !error && viewMode === "map" && (
+                <div className="bg-sage rounded-xl flex items-center justify-center text-stone font-sans h-96">
+                    Map placeholder
+                </div>
+            )}
+
+            {!loading && !error && viewMode === "list" && (
+                <div>
+                    {Object.entries(groupedSpots).map(([category, categorySpots]) =>
+                        <div key={category} className="mb-8">
+                            <h2 className="font-display text-rosewood mb-2">{category}</h2>
+                            <div className="flex gap-3 overflow-x-auto pb-2">
+                                {categorySpots.slice(0,20).map(spot => (
+                                    <div key={spot.id} className="shrink-0 w-70">
+                                        <SpotCard spot={spot} />
+                                    </div>
+                                ))}
+                            </div>
+                            <button className="text-rosewood text-sm mt-1">View All</button>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    )
 }
+
 export default FriendsPage;

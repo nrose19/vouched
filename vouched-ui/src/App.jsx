@@ -10,6 +10,10 @@ import ExplorePage from './pages/ExplorePage'
 import AddSpotPage from './pages/AddSpotPage'
 import FriendsPage from './pages/FriendsPage'
 import ProfilePage from './pages/ProfilePage'
+import ProfileOverview from './pages/ProfileOverview'
+import MySpotsPage from './pages/MySpotsPage'
+import MapViewPage from './pages/MapViewPage'
+import FriendsFollowingPage from './pages/FriendsFollowingPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -26,7 +30,12 @@ function App() {
         <Route path="/explore" element={<ExplorePage/>}/>
         <Route path="/add" element={<AddSpotPage/>}/>
         <Route path="/friends" element={<FriendsPage/>}/>
-        <Route path="/profile" element={<ProfilePage/>}/>
+        <Route path="/profile" element={<ProfilePage/>}>
+          <Route index element={<ProfileOverview />}/>
+          <Route path="/profile/spots" element={<MySpotsPage />}/>
+          <Route path="/profile/following" element={<FriendsFollowingPage />}/>
+          <Route path="/profile/map" element={<MapViewPage />}/>
+        </Route>   
       </Route>
     </Routes>
    </BrowserRouter>
