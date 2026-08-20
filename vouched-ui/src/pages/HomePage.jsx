@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { getSpots } from "../api/spots";
 import SpotCard from "../components/SpotCard";
 import { useState, useEffect } from "react";
+import SpotsMap from "../components/SpotsMap";
 
 function HomePage(){
     const { user } = useAuth();
@@ -61,8 +62,8 @@ function HomePage(){
                 </div>
 
                 {/* map placeholder */}
-                <div className="bg-sage rounded-xl flex items-center justify-between text-stone font-sans">
-                    static map
+                <div className="h-full">
+                    <SpotsMap spots={recentSpots}/>
                 </div>
 
             </div>
