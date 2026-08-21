@@ -34,4 +34,7 @@ public interface SpotRepository extends JpaRepository<Spot, UUID> {
             String ownerId,
             List<PrivacyLevel> privacyLevels
     );
+
+//    updating the spots added prior to leaflet/open map integration -- need to update their lat/lon
+    List<Spot> findByLatitudeIsNull();
 }

@@ -1,5 +1,6 @@
 package com.nicolecohen.vouched.service;
 
+import com.nicolecohen.vouched.dto.GeocodeBackfillResponse;
 import com.nicolecohen.vouched.exception.AlreadyExistsException;
 import com.nicolecohen.vouched.exception.NotFoundException;
 import com.nicolecohen.vouched.model.User;
@@ -17,10 +18,14 @@ import java.util.UUID;
 public class AdminService {
     private final UserRepository userRepository;
     private final SpotRepository spotRepository;
+    private final SpotService spotService;
 
-    public AdminService(UserRepository userRepository, SpotRepository spotRepository){
+    public AdminService(UserRepository userRepository,
+                        SpotRepository spotRepository,
+                        SpotService spotService) {
         this.userRepository = userRepository;
-        this.spotRepository =  spotRepository;
+        this.spotRepository = spotRepository;
+        this.spotService = spotService;
     }
     //get all users - needs to call user repo & map each user to a admin user response
     public List<AdminUserResponse> getAllUsers(){
@@ -63,4 +68,8 @@ public class AdminService {
         userRepository.save(user);
     }
 
+    //    updating the spots added prior to leaflet/open map integration -- need to update their lat/lon
+    public GeocodeBackfillResponse geocodeMissingSpots() {
+        return spotService.geocodeMissingSpots();
+    }
 }

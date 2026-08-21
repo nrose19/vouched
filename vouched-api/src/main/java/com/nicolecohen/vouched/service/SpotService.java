@@ -5,6 +5,7 @@ import com.nicolecohen.vouched.enums.PrivacyLevel;
 import com.nicolecohen.vouched.exception.*;
 import com.nicolecohen.vouched.model.Spot;
 import com.nicolecohen.vouched.repository.SpotRepository;
+import com.nicolecohen.vouched.dto.GeocodeBackfillResponse;
 
 import com.nicolecohen.vouched.security.CurrentUserService;
 import org.springframework.stereotype.Service;
@@ -83,6 +84,47 @@ public class SpotService {
             throw new NotFoundException("Cannot find spot with this id: "+ id);
         }
         spotRepository.deleteById(id);
+    }
+
+//    updating the spots added prior to leaflet/open map integration -- need to update their lat/lon
+    public GeocodeBackfillResponse geocodeMissingSpots() {
+        List<Spot> missing = spotRepository.findByLatitudeIsNull();
+
+        int attempted = 0;
+        int succeeded = 0;
+        int failed = 0;
+        int skipped = 0;
+
+        for (Spot spot : missing) {
+            // skip spots with no address — nothing to geocode
+            if (spot.getAddress() == null || spot.getAddress().isBlank()) {
+                skipped++;
+                continue;
+            }
+
+            attempted++;
+
+            double[] coords = geocodingService.geocodeAddress(spot.getAddress());
+
+            if (coords != null) {
+                spot.setLatitude(coords[0]);
+                spot.setLongitude(coords[1]);
+                spotRepository.save(spot);
+                succeeded++;
+            } else {
+                failed++;
+            }
+
+            // respect Nominatim's 1 request per second limit
+            try {
+                Thread.sleep(1100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+
+        return new GeocodeBackfillResponse(attempted, succeeded, failed, skipped);
     }
 
 }

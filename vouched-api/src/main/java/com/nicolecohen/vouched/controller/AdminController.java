@@ -5,6 +5,7 @@ import com.nicolecohen.vouched.exception.NotFoundException;
 import com.nicolecohen.vouched.service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.nicolecohen.vouched.dto.GeocodeBackfillResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,4 +40,9 @@ public class AdminController {
             return ResponseEntity.noContent().build();
     }
 
+//    updating the spots added prior to leaflet/open map integration -- need to update their lat/lon
+    @PostMapping("/spots/geocode-missing")
+    public ResponseEntity<GeocodeBackfillResponse> geocodeMissingSpots() {
+        return ResponseEntity.ok(adminService.geocodeMissingSpots());
+    }
 }
