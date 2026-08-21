@@ -3,6 +3,7 @@ import { getSpots } from "../api/spots";
 import SpotCard from "../components/SpotCard";
 import { searchUser } from "../api/user";
 import { sendFriendRequest } from "../api/friendships";
+import SpotsMap from "../components/SpotsMap";
 
 
 function ExplorePage() {
@@ -107,9 +108,9 @@ function ExplorePage() {
 
       {/* map view */}
       {!loading && !error && viewMode === "map" && searchMode === "spots" && (
-        <div>
-          Map placeholder
-        </div>
+          <div className="h-screen">
+              <SpotsMap spots={filteredSpots}/>
+          </div>
       )}
 
       {/* list view + spots view  */}

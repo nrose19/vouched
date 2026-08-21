@@ -1,10 +1,11 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import MapResizer from "./MapResizer";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 // Fixes Leaflet's default marker icons not loading correctly under Vite's bundler —
 // without this, pins render broken/invisible. This runs once when the module loads.
-delete L.Icon.Default.prototype._get_iconUrl;
+delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -12,13 +13,15 @@ L.Icon.Default.mergeOptions({
 });
 
 //Glasgow's coordinates are acting as the baseline center
-function SpotsMap({ spots, center = [55.8642, -4.2518], zoom = 12 }) {
+function SpotsMap({ spots, center = [55.8642, -4.2518], zoom = 13 }) {
 
     // filter spots to only ones with real lat/long
     const filteredSpots = spots.filter(spot => spot.latitude != null && spot.longitude != null)
 
+    console.log(filteredSpots)
     return(
         <MapContainer center={center} zoom={zoom} style={{ height: "100%", width: "100%" }} className="rounded-xl">
+            <MapResizer />
             <TileLayer 
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

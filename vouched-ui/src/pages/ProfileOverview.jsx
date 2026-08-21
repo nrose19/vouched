@@ -1,6 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 import { useRef } from "react";
 import SpotCard from "../components/SpotCard";
+import SpotsMap from "../components/SpotsMap";
 
 function ProfileOverview() {
     const { user, spots, following } = useOutletContext();
@@ -33,8 +34,8 @@ function ProfileOverview() {
 
     return(
         <div className="grid grid-cols-[1fr_1fr] gap-6 mt-20">
-          <div className="bg-sage rounded-xl flex items-center justify-center text-stone font-sans h-64">
-            map
+          <div className="h-96">
+            <SpotsMap spots={myRecentSpots} />
           </div>
 
           <div className="flex flex-col gap-6 min-w-0 -mt-8">

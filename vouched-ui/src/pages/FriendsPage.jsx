@@ -3,6 +3,7 @@ import { getSpots } from "../api/spots";
 import { getMyFriends } from "../api/friendships";
 import { useAuth } from "../context/AuthContext";
 import SpotCard from "../components/SpotCard";
+import SpotsMap from "../components/SpotsMap";
 
 
 function FriendsPage(){
@@ -73,8 +74,8 @@ function FriendsPage(){
             {error && <p className="text-brick text-sm">{error}</p>}
 
             {!loading && !error && viewMode === "map" && (
-                <div className="bg-sage rounded-xl flex items-center justify-center text-stone font-sans h-96">
-                    Map placeholder
+                <div className="h-screen">
+                    <SpotsMap spots={friendsSpots} />
                 </div>
             )}
 
