@@ -34,7 +34,7 @@ function ProfileOverview() {
 
     return(
         <div className="grid grid-cols-[1fr_1fr] gap-6 mt-20">
-          <div className="h-96">
+          <div className="h-96 min-h-160">
             <SpotsMap spots={myRecentSpots} />
           </div>
 

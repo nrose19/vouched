@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
-import loginBg from "../assets/dual_city_bg.jpg";
+import loginBg from "../assets/gla_image.jpg";
 
 function LoginPage(){
     const navigate = useNavigate();
@@ -34,11 +34,12 @@ function LoginPage(){
 
     return(
     <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${loginBg})`}}>
+        <div className="absolute inset-0 bg-rosewood/60"/>
         <div className="min-h-screen flex items-center justify-center">
-            <div className="bg-paper-light/90 rounded-2xl p-8 w-full max-w-sm">
-                <h1 className="text-rosewood text-5xl">Vouched</h1>
+            <div className="bg-paper/80 rounded-2xl p-15 w-full max-w-lg z-50">
+                <h1 className="text-rosewood text-7xl">Vouched</h1>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form onSubmit={handleSubmit} className="flex text-lg flex-col gap-4">
                     <input 
                         name="email"
                         type="email"

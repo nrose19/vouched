@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
-import registerBg from "../assets/dual_city_bg.jpg";
+import registerBg from "../assets/edi_image.jpg";
 
 function RegisterPage(){
     const navigate = useNavigate();
@@ -39,11 +39,12 @@ function RegisterPage(){
 
     return(
         <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${registerBg})`}}>
+            <div className="absolute inset-0 bg-rosewood/60"/>
             <div className="min-h-screen flex items-center justify-center">
-                <div className="bg-paper-light/90 rounded-2xl p-8 w-full max-w-sm">
-                    <h1 className="text-rosewood text-5xl">Vouched</h1>
+                <div className="bg-paper/80 rounded-2xl p-15 w-full max-w-lg z-50">
+                    <h1 className="text-rosewood text-6xl">Vouched</h1>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                    <form onSubmit={handleSubmit} className="flex flex-col text-lg gap-4">
                         <input
                             name="displayName"
                             type="text"
