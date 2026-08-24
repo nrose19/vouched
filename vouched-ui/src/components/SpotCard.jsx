@@ -1,17 +1,44 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { updateSpot } from "../api/spots";
 import SpotsMap from "./SpotsMap";
+import { deleteSpot } from "../api/spots";
 
-function SpotCard({spot}){
+function SpotCard({spot: initialSpot, onDelete}){
     const { user } = useAuth();
+    const [spot, setSpot] = useState(initialSpot);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
 
     const privacyColors = {
         PRIVATE: "bg-stone",
         FRIENDS: "bg-moss",
     };
 
-    const isOwner = spot.ownerId === user.id;
+    const isOwner = user && spot.ownerId === user.id;
+
+    async function handleToggle(field) {
+        const oppositeField = field === "visited" ? "wantsToVisit" : "visited";
+        const updatedFields = { ...spot, [field]: !spot[field], [oppositeField]: false };
+        try {
+            const response = await updateSpot(spot.id, updatedFields);
+            setSpot(response.data);
+        } catch (err) {
+            console.error("Could not update spot.");
+        }
+    }
+
+    async function handleDelete() {
+        try {
+        await deleteSpot(spot.id);
+        setIsConfirmOpen(false);
+        setIsModalOpen(false);
+        if (onDelete) onDelete(spot.id);
+        } catch (err) {
+        console.error("Could not delete spot.");
+        }
+    }
 
     return(
         <>
@@ -40,14 +67,28 @@ function SpotCard({spot}){
             {isModalOpen && (
                 <div 
                     onClick={() => setIsModalOpen(false)}
-                    className="fixed inset-0 bg-ink/50 flex items-center justify-center z-[9999]"
+                    className="fixed inset-0 bg-ink/50 flex items-center justify-center z-9999"
                 >
                     <div 
                         onClick={(e) => e.stopPropagation()} className="bg-paper-light rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
                     >
                         <div className="flex justify-between text-sm mb-2">
                             <span className={`px-2 py-1 rounded-full text-xs ${privacyColors[spot.privacyLevel]}`}>{spot.privacyLevel}</span>
-                            {isOwner && <button className="text-rosewood font-display">update spot</button>}
+                            {isOwner && (                        
+                                <button onClick={() => setIsConfirmOpen(true)} className="text-brick font-display">delete</button>
+                            )}
+
+                                {isConfirmOpen && (
+                                <div onClick={() => setIsConfirmOpen(false)} className="fixed inset-0 bg-ink/50 flex items-center justify-center z-10000">
+                                    <div onClick={(e) => e.stopPropagation()} className="bg-paper-light rounded-2xl p-6 max-w-sm">
+                                    <p className="font-display text-lg mb-4">Delete "{spot.name}"? This can't be undone.</p>
+                                    <div className="flex gap-3 justify-end">
+                                        <button onClick={() => setIsConfirmOpen(false)} className="px-4 py-2 rounded-lg bg-paper">Cancel</button>
+                                        <button onClick={handleDelete} className="px-4 py-2 rounded-lg bg-brick text-paper-light">Delete</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <h1 className="font-logo text-center text-5xl text-rosewood">{spot.name}</h1>
@@ -55,12 +96,16 @@ function SpotCard({spot}){
 
                         {/* has the spot been visited or not? */}
                         <div className="flex gap-6 mb-4 mt-10 font-sans text-sm">
-                            <span className="flex items-center gap-2">
-                                <span className={`w-4 h-4 border rounded ${spot.isVisited ? "bg-rosewood" : "bg-transparent"}`} />
+                            <span 
+                            onClick={() => isOwner && handleToggle("visited")}
+                            className={`flex items-center gap-2 ${isOwner ? "cursor-pointer" : ""}`}>
+                                <span className={`w-4 h-4 border rounded ${spot.visited ? "bg-rosewood" : "bg-transparent"}`} />
                                 Visited
                             </span>
-                            <span className="flex items-center gap-2">
-                                <span className={`w-4 h-4 border rounded ${spot.isWantsToVisit ? "bg-rosewood" : "bg-transparent"}`} />
+                            <span 
+                            onClick={() => isOwner && handleToggle("wantsToVisit")}
+                            className={`flex items-center gap-2 ${isOwner ? "cursor-pointer" : ""}`}>
+                                <span className={`w-4 h-4 border rounded ${spot.wantsToVisit ? "bg-rosewood" : "bg-transparent"}`} />
                                 Wants to visit
                             </span>
                         </div>
@@ -91,9 +136,9 @@ function SpotCard({spot}){
                                 <div className="h-60 max-w-none">
                                     <SpotsMap spots={[spot]} center={[spot.latitude, spot.longitude]} zoom={15} />
                                 </div>
-                                <div className="h-20 bg-paper rounded-xl flex items-center justify-center text-stone font-sans">
+                                {/* <div className="h-20 bg-paper rounded-xl flex items-center justify-center text-stone font-sans">
                                     Pictures
-                                </div>
+                                </div> */}
                             </div>
                         </div> 
                     </div>

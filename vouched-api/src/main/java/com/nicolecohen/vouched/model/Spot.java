@@ -60,7 +60,7 @@ public class Spot {
     private List<String> vibeTags;
 
     //JPA default behavior
-    private boolean isVisited;
+    private boolean visited;
 
     //JPA default behavior
     private boolean wantsToVisit;

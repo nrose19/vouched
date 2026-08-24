@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { NavLink, useOutletContext } from "react-router-dom";
 import SpotCard from "../components/SpotCard";
 
 function MySpotsPage() {
@@ -29,6 +29,7 @@ function MySpotsPage() {
 
     return (
         <div className="mt-8 mx-30">
+            <NavLink to="/profile/" className="flex justify-end mb-2 text-sm">Back to Profile</NavLink>
             <input
                 type="text"
                 placeholder="Search"
@@ -44,7 +45,7 @@ function MySpotsPage() {
                     <div className="flex gap-3 overflow-x-auto pb-2">
                         {categorySpots.slice(0,4).map(spot => (
                             <div key={spot.id} className="shrink-0 w-70">
-                                <SpotCard spot={spot} />
+                                <SpotCard key={spot.id} spot={spot} onDelete={(id) => setSpots(prev => prev.filter(s => s.id !== id))} />
                             </div>
                         ))}
                     </div>

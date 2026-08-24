@@ -107,7 +107,7 @@ function ExplorePage() {
       {error && <p className="text-brick text-sm">{error}</p>}
 
       {/* map view */}
-      {!loading && !error && viewMode === "map" && searchMode === "spots" && (
+      {!loading && !error && viewMode === "map" && (
           <div className="h-screen">
               <SpotsMap spots={filteredSpots}/>
           </div>
@@ -116,7 +116,7 @@ function ExplorePage() {
       {/* list view + spots view  */}
       {!loading && !error && viewMode === "list" && searchMode === "spots" && (
         <div className="grid grid-cols-4 gap-4 mt-6">
-          {filteredSpots.map(spot => <SpotCard key={spot.id} spot={spot} />)}
+          {filteredSpots.map(spot => <SpotCard key={spot.id} spot={spot} onDelete={(id) => setSpots(prev => prev.filter(s => s.id !== id))} />)}
         </div>
       )}
 

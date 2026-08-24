@@ -87,7 +87,7 @@ function FriendsPage(){
                             <div className="flex gap-3 overflow-x-auto pb-2">
                                 {categorySpots.slice(0,20).map(spot => (
                                     <div key={spot.id} className="shrink-0 w-70">
-                                        <SpotCard spot={spot} />
+                                        <SpotCard key={spot.id} spot={spot} onDelete={(id) => setSpots(prev => prev.filter(s => s.id !== id))} />
                                     </div>
                                 ))}
                             </div>

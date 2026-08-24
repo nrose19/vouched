@@ -18,7 +18,7 @@ function AddSpotPage() {
     notes: "", 
     privacyLevel: "PRIVATE", 
     vibeTags: "", //will be stored as a raw string for now
-    isVisited: false, //not touched by handleChange -- not MVP currently
+    visited: false, //not touched by handleChange -- not MVP currently
     wantsToVisit: false, //not touched by handleChange -- not MVP currently
   })
 
@@ -28,22 +28,31 @@ function AddSpotPage() {
     setFormData(prev => ({...prev, [e.target.name]: e.target.value}));
   }
   
-  async function handleSubmit(e){
+  function validateForm() {
+    const missing = [];
+    if (!formData.name.trim()) missing.push("Name");
+    if (!formData.city.trim()) missing.push("City");
+    if (!formData.address.trim()) missing.push("Address");
+    return missing;
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    //splitting the vibeTags at the comma, trim the additional white space from this split
+    const missingFields = validateForm();
+    if (missingFields.length > 0) {
+      setError(`Please fill in: ${missingFields.join(", ")}`);
+      return;
+    }
+
     const tagsArray = formData.vibeTags.split(',').map(tag => tag.trim());
+    const payload = { ...formData, vibeTags: tagsArray };
 
-    //mutate formData directly to overwrite with new tags array
-    const payload = {...formData, vibeTags: tagsArray};
-
-
-    try{
+    try {
       const response = await createSpot(payload);
       navigate('/');
-    
-    } catch (err){
-      setError(err.response?.data?.message || "Failure to add spot.")
+    } catch (err) {
+      setError(err.response?.data?.message || "Failure to add spot.");
     }
   }
 
@@ -65,6 +74,27 @@ function AddSpotPage() {
               <option key={category}>{category}</option>
             ))}
           </select>
+        </label>
+
+        {/* visited or wants to visit */}
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            name="visited"
+            checked={formData.visited}
+            onChange={(e) => setFormData(prev => ({ ...prev, visited: e.target.checked, wantsToVisit: false }))}
+          />
+          Visited
+        </label>
+
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            name="wantsToVisit"
+            checked={formData.wantsToVisit}
+            onChange={(e) => setFormData(prev => ({ ...prev, wantsToVisit: e.target.checked, visited: false }))}
+          />
+          Wants to visit
         </label>
 
         {/* text box for notes instead of a singular line */}

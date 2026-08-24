@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getMyFriends, getPendingRequests, acceptRequest, declineRequest, removeFriend } from "../api/friendships";
-import { useOutletContext } from "react-router-dom";
+import { NavLink, useOutletContext } from "react-router-dom";
 
 
 function FriendsFollowingPage() {
@@ -30,13 +30,14 @@ function FriendsFollowingPage() {
     fetchData();
   }, [])
 
+  //split pendingRequests by direction
+  const incomingRequests = pendingRequests.filter(r => !r.youSentRequest);
+  const sentRequests = pendingRequests.filter(r => r.youSentRequest);
 
   async function handleAccept(friendshipId){
     try{
       const result = await acceptRequest(friendshipId);
-      //filter friendship id out of pending requests
       setPendingRequests(prev => prev.filter(request => request.friendshipId !== friendshipId));
-      //add this new friend to friends
       setFriends(prev => [...prev, result.data]);
 
     } catch (err) {
@@ -48,7 +49,6 @@ function FriendsFollowingPage() {
   async function handleDecline(friendshipId){
     try{
       await declineRequest(friendshipId);
-      //filter friendship id out of pending requests
       setPendingRequests(prev => prev.filter(request => request.friendshipId !== friendshipId));
 
     } catch (err){
@@ -59,8 +59,10 @@ function FriendsFollowingPage() {
   return(
     <div className="p-8">
         <h1 className="text-5xl">Friendships</h1>
+          <NavLink to="/profile/" className="flex justify-end mb-2 pr-6 text-sm">Back to Profile</NavLink>
           <h2 className="font-display text-xl mb-2">Pending requests</h2>
-          {pendingRequests.map(request => (
+          {incomingRequests.length === 0 && <p className="text-sm text-stone">No pending requests</p>}
+          {incomingRequests.map(request => (
             <div key={request.friendshipId} className="flex justify-between items-center bg-paper rounded-lg p-3 mb-2">
               <span>{request.friendDisplayName}</span>
               <div>
@@ -70,7 +72,18 @@ function FriendsFollowingPage() {
             </div>
           ))}
 
+          <h2 className="font-display text-xl mb-2 mt-6">Sent requests</h2>
+          {sentRequests.length === 0 && <p className="text-sm text-stone">No sent requests awaiting response</p>}
+          {sentRequests.map(request => (
+            <div key={request.friendshipId} className="flex justify-between items-center bg-paper rounded-lg p-3 mb-2">
+              <span>{request.friendDisplayName}</span>
+              <span className="text-stone text-sm">pending...</span>
+            </div>
+          ))}
+
+
           <h2 className="font-display text-xl mb-2 mt-6">Friends</h2>
+          {friends.length === 0 && <p className="text-sm text-stone">No friends yet</p>}
           {friends.map(friend => (
             <div key={friend.friendshipId} className="bg-paper rounded-lg p-3 mb-2">
               {friend.friendDisplayName}

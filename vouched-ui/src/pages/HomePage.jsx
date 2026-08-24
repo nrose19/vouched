@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getSpots } from "../api/spots";
+import { getMyFriends } from "../api/friendships";
 import SpotCard from "../components/SpotCard";
 import { useState, useEffect } from "react";
 import SpotsMap from "../components/SpotsMap";
+import FilterSidebar from "../components/FilterSideBar";
+import { toggleInSet } from "../utils/toggleInSet";
+import { filterSpots } from "../utils/filterSpots";
 
 function HomePage(){
     const { user } = useAuth();
@@ -12,15 +16,28 @@ function HomePage(){
     const [spots, setSpots] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [friends, setFriends] = useState([]);
+
+    const [selectedCategories, setSelectedCategories] = useState(new Set());
+    const [selectedPrivacy, setSelectedPrivacy] = useState(new Set());
+    const [selectedStatus, setSelectedStatus] = useState(new Set());
+    const [savedByFilter, setSavedByFilter] = useState("all") //all, friends, or me -- further development (filter by specific friend)
+    //selected city -- further development
 
 
+    const friendIds = new Set(friends.map(f => f.friendUserId));
+    const categories = ["CAFE", "RESTAURANT", "BAR", "PUB", "SALON", "SHOP", "GYM", "GALLERY", "PARK", "MARKET", "CINEMA", "MUSIC_VENUE", "OTHER"];
+    const filteredForDashboard = filterSpots(spots, { selectedCategories, selectedPrivacy, savedByFilter, selectedStatus, userId: user.id, friendIds });
+    
     //get spots - use effect runs once on mount
     useEffect(() => {
         
         async function fetchSpots(){
             try{
-                const response = await getSpots();
-                setSpots(response.data);
+                const spotsResponse = await getSpots();
+                const friendsResponse = await getMyFriends();
+                setSpots(spotsResponse.data);
+                setFriends(friendsResponse.data);
             } catch (err){
                 setError('Unable to load spots.');
             } finally {
@@ -30,8 +47,9 @@ function HomePage(){
         fetchSpots();
     },[])
 
+
     //recent spots (up to 10)
-    const recentSpots = [...spots]
+    const recentSpots = [...filteredForDashboard]
         .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0,10);
 
@@ -42,21 +60,28 @@ function HomePage(){
             <h1 className="text-rosewood text-8xl">Vouched</h1>
             
             {/* three separate columns holding filter sidebar, recent spots, and map */}
-            <div className="grid grid-cols-[150px_320px_1fr] gap-4 h-full">
-                {/* filtering sidebar - placeholder currently */}
-                <div className="bg-paper rounded-xl flex items-center justify-center py-6">
-                    <span className="[writing-mode:vertical-rl] rotate-180 font-sans text-sm text-ink">Quick Spot Filter/City Switcher</span>
-                </div>
-                
+            <div className="grid grid-cols-[0.1fr_0.25fr_1fr] gap-4 max-h-185">
+                {/* filtering sidebar*/}
+                <FilterSidebar
+                    categories={categories}
+                    selectedCategories={selectedCategories}
+                    onToggleCategory={(category) => toggleInSet(setSelectedCategories, category)}
+                    selectedPrivacy={selectedPrivacy}
+                    onTogglePrivacy={(level) => toggleInSet(setSelectedPrivacy, level)}
+                    savedByFilter={savedByFilter}
+                    onSavedByChange={setSavedByFilter}
+                    selectedStatus={selectedStatus}
+                    onToggleStatus={(status) => toggleInSet(setSelectedStatus, status)}
+                />
 
                 {/* recent spots, middle section of page */}
-                <div className="bg-paper rounded-xl p-4 max-h-150 overflow-y-auto h-full">
+                <div className="bg-paper rounded-xl p-4 max-h-185 overflow-y-auto h-full">
                     <h2 className="font-display text-lg mb-3">Recent Spots</h2>
                     {loading && <p>Loading...</p>}
                     {error && <p>{error}</p>}
                     {!loading && !error && (
                         <div className="flex flex-col gap-3">
-                            {recentSpots.map(spot => <SpotCard key={spot.id} spot={spot} />)}
+                            {recentSpots.map(spot => <SpotCard key={spot.id} spot={spot} onDelete={(id) => setSpots(prev => prev.filter(s => s.id !== id))} />)}
                         </div>
                     )}
                 </div>
