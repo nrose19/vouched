@@ -45,7 +45,7 @@ services:
     name: vouched-ui
     rootDir: vouched-ui
     buildCommand: npm install && npm run build
-    staticPublishPath: vouched-ui/dist
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_BASE_URL
         value: https://vouched-api.onrender.com/api
