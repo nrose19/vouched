@@ -43,7 +43,6 @@ services:
   - type: web
     runtime: static
     name: vouched-ui
-    region: frankfurt
     rootDir: vouched-ui
     buildCommand: npm install && npm run build
     staticPublishPath: vouched-ui/dist
