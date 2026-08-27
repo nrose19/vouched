@@ -12,8 +12,8 @@ services:
     region: frankfurt
     plan: free
     rootDir: vouched-api
-    dockerfilePath: vouched-api/Dockerfile
-    dockerContext: vouched-api
+    dockerfilePath: Dockerfile
+    dockerContext: .
     envVars:
       - key: DB_HOST
         fromDatabase:
