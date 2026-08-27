@@ -48,7 +48,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://vouched-api-4zk0.onrender.com
+        value: https://vouched-api-4zk0.onrender.com/api
     routes:
       - type: rewrite
         source: /*
