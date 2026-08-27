@@ -35,6 +35,18 @@ public interface SpotRepository extends JpaRepository<Spot, UUID> {
             List<PrivacyLevel> privacyLevels
     );
 
-//    updating the spots added prior to leaflet/open map integration -- need to update their lat/lon
+//    AI created - updating the spots added prior to leaflet/open map integration -- need to update their lat/lon
     List<Spot> findByLatitudeIsNull();
+
+    //[AI created 25/08/2026 - to fix a security bug with the spots]
+    @Query("""
+    SELECT s FROM Spot s
+    WHERE s.ownerId = :currentUserId
+    OR (s.ownerId IN :friendIds AND s.privacyLevel = :privacyLevel)
+    """)
+    List<Spot> findVisibleSpots(
+            @Param("currentUserId") String currentUserId,
+            @Param("friendIds") List<String> friendIds,
+            @Param("privacyLevel") PrivacyLevel privacyLevel
+    );
 }

@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import { useRef } from "react";
 import SpotCard from "../components/SpotCard";
 import SpotsMap from "../components/SpotsMap";
+import { Link } from "react-router-dom";
 
 function ProfileOverview() {
     const { user, spots, following } = useOutletContext();
@@ -33,12 +34,20 @@ function ProfileOverview() {
     }
 
     return(
+      <div>
+        {/* if no spots have been saved */}
+        {myRecentSpots.length === 0 && friendsRecentSpots.length === 0 && (
+          <div className="text-center mt-10 -mb-10">
+            <p>No spots saved yet. Let's add one together!</p>
+            <Link to="/add" className="font-bold text-rosewood">Add a spot</Link>
+          </div>
+        )}
         <div className="grid grid-cols-[1fr_1fr] gap-6 mt-20">
           <div className="h-96 min-h-160">
             <SpotsMap spots={myRecentSpots} />
           </div>
 
-          <div className="flex flex-col gap-6 min-w-0 -mt-8">
+          <div className="flex flex-col gap-6 min-w-0">
             <div>
               <h2 className="font-display text-rosewood mb-2">My most recent spots:</h2>
               <div className="relative">
@@ -65,6 +74,9 @@ function ProfileOverview() {
             </div>
           </div>
         </div>
+
+      </div>
+        
     )
 }
 

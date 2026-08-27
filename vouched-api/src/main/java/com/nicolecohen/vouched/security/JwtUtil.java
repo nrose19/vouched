@@ -3,6 +3,7 @@ package com.nicolecohen.vouched.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -11,13 +12,16 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    //would normally never be hardcoded - ok for scope of dissertation
-    private static final String SECRET =
-            "vouchedSuperSecretKeyForJwtSigningMustBe256BitsLong!!";
+    //[AI created 27/08 -- to help with Render deployment of application,
+    // adjusting JWT secret key, rather than hard coding it]
+    private static final long EXPIRY_MS = 86400000;
 
-    private static final long EXPIRY_MS = 86400000; // 24 hours until token expires
+    private final Key key;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
 
     //JWT builder
     public String generateToken(String email, String role){

@@ -47,14 +47,14 @@ function ProfilePage() {
 
         <div className="flex gap-6 font-display mb-6">
           <NavLink to="/profile/spots" end className={({ isActive }) => isActive ? "text-rosewood" : "text-ink"}>My Spots</NavLink>
-          <NavLink to="/profile/following" className={({ isActive }) => isActive ? "text-rosewood" : "text-ink"}>Friends</NavLink>
+          <NavLink to="/profile/following" className={({ isActive }) => isActive ? "text-rosewood" : "text-ink"}>My Friends</NavLink>
           <NavLink to="/profile/map" className={({ isActive }) => isActive ? "text-rosewood" : "text-ink"}>Map View</NavLink>
         </div>
       </div>
         
       {loading && <p>Loading...</p>}
       {error && <p className="text-brick text-sm">{error}</p>}
-      
+
       {!loading && !error && <Outlet context={{ spots, following: friends, user }}/>}
 
     </div>

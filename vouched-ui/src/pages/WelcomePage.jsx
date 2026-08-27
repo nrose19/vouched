@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import cityBgImage from "../assets/dual_city_bg.jpg";
 
+// AI created [24/08/26] with modifications by Nicole Cohen to adjust look and feel.
 function WelcomePage() {
   return (
     <div className="relative min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${cityBgImage})` }}>
@@ -9,19 +10,19 @@ function WelcomePage() {
       <div className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center">
         
 
-        <div className="bg-paper/70 rounded-2xl p-5 w-full max-w-2xl z-50 -mt-5 flex flex-col items-center">
-            <h1 className="font-logo text-8xl text-rosewood">Vouched</h1>
+        <div className="bg-paper/70 rounded-2xl p-5 w-full max-w-2xl z-50 flex flex-col items-center">
+            <h1 className="font-logo text-8xl text-rosewood mt-5">Vouched</h1>
             <p className="font-display text-3xl text-ink mb-2">
             Discover your city, one trusted spot at a time.
             </p>
 
             <p className="font-sans text-xl font-bold text-ink max-w-md pt-2 pb-2">
-            Save the places you love, share them with friends you whose opinions you trust.
+            Save the places you love and share them with friends.
             <br />
-            Find your next favourite spot through people you know, not strangers.
+            Find your next favourite spot through friends you trust, not strangers.
             </p>        
            
-            <div className="flex justify-center gap-10 mt-5">
+            <div className="flex justify-center gap-10 mt-5 mb-5">
                 <Link to="/login" className="font-display text-xl bg-rosewood text-paper-light px-6 py-3 rounded-lg">
                     Log in
                 </Link>

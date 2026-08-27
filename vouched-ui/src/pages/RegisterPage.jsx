@@ -42,7 +42,7 @@ function RegisterPage(){
             <div className="absolute inset-0 bg-rosewood/60"/>
             <div className="min-h-screen flex items-center justify-center">
                 <div className="bg-paper/80 rounded-2xl p-15 w-full max-w-lg z-50">
-                    <h1 className="text-rosewood text-6xl">Vouched</h1>
+                    <h1 className="text-rosewood text-7xl">Vouched</h1>
 
                     <form onSubmit={handleSubmit} className="flex flex-col text-lg gap-4">
                         <input

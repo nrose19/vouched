@@ -7,7 +7,7 @@ function ProtectedRoute({children}){
     if(user){
         return children;
     } else {
-        return <Navigate to="/login"/>
+        return <Navigate to="/welcome"/>
     }
 
 }

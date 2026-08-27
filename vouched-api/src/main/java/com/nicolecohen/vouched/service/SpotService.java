@@ -1,9 +1,12 @@
 package com.nicolecohen.vouched.service;
 
-import com.nicolecohen.vouched.enums.Category;
 import com.nicolecohen.vouched.enums.PrivacyLevel;
 import com.nicolecohen.vouched.exception.*;
 import com.nicolecohen.vouched.model.Spot;
+import com.nicolecohen.vouched.enums.FriendshipStatus;
+import com.nicolecohen.vouched.model.Friendship;
+import com.nicolecohen.vouched.model.User;
+import com.nicolecohen.vouched.repository.FriendshipRepository;
 import com.nicolecohen.vouched.repository.SpotRepository;
 import com.nicolecohen.vouched.dto.GeocodeBackfillResponse;
 
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SpotService {
@@ -19,22 +23,40 @@ public class SpotService {
     private final SpotRepository spotRepository;
     private final CurrentUserService currentUserService;
     private final GeocodingService geocodingService;
+    private final FriendshipRepository friendshipRepository;
 
-    public SpotService(SpotRepository spotRepository, CurrentUserService currentUserService, GeocodingService geocodingService){
+    public SpotService(SpotRepository spotRepository, CurrentUserService currentUserService, GeocodingService geocodingService, FriendshipRepository friendshipRepository){
         this.spotRepository = spotRepository;
         this.currentUserService = currentUserService;
         this.geocodingService = geocodingService;
+        this.friendshipRepository = friendshipRepository;
     }
 
+//    [AI created 25/08/2026 to fix a security issue with visible spots]
     public List<Spot> getAllSpots() {
-        String currentUserId = currentUserService
-                .getCurrentUser()
-                .getId()
-                .toString();
-        return spotRepository.findByOwnerIdOrPrivacyLevelIn(
-                currentUserId,
-                List.of(PrivacyLevel.FRIENDS, PrivacyLevel.COMMUNITY)
-        );
+        User currentUser = currentUserService.getCurrentUser();
+        String currentUserId = currentUser.getId().toString();
+
+        // fetch all accepted friendships involving the current user
+        List<Friendship> friendships = friendshipRepository
+                .findAllFriendshipsByUserAndStatus(
+                        currentUser, FriendshipStatus.ACCEPTED);
+
+        // extract friend IDs — the friend is whichever side is not the current user
+        List<String> friendIds = friendships.stream()
+                .map(f -> f.getRequester().getId().equals(currentUser.getId())
+                        ? f.getAddressee().getId().toString()
+                        : f.getRequester().getId().toString())
+                .collect(Collectors.toList());
+
+        // if no friends yet, return only own spots — avoids empty IN clause
+        if (friendIds.isEmpty()) {
+            return spotRepository.findByOwnerId(currentUserId);
+        }
+
+        // return own spots + accepted friends' FRIENDS-level spots
+        return spotRepository.findVisibleSpots(
+                currentUserId, friendIds, PrivacyLevel.FRIENDS);
     }
 
     public Spot getSpot(UUID id){

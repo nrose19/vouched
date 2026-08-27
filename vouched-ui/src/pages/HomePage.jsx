@@ -8,6 +8,7 @@ import SpotsMap from "../components/SpotsMap";
 import FilterSidebar from "../components/FilterSideBar";
 import { toggleInSet } from "../utils/toggleInSet";
 import { filterSpots } from "../utils/filterSpots";
+import { Link } from "react-router-dom";
 
 function HomePage(){
     const { user } = useAuth();
@@ -57,7 +58,7 @@ function HomePage(){
     return(
         <div className="p-6">
             {/* Header */}
-            <h1 className="text-rosewood text-8xl">Vouched</h1>
+            <h1 className="text-rosewood text-8xl mt-5">Vouched</h1>
             
             {/* three separate columns holding filter sidebar, recent spots, and map */}
             <div className="grid grid-cols-[0.1fr_0.25fr_1fr] gap-4 max-h-185">
@@ -79,6 +80,13 @@ function HomePage(){
                     <h2 className="font-display text-lg mb-3">Recent Spots</h2>
                     {loading && <p>Loading...</p>}
                     {error && <p>{error}</p>}
+                    {/* if no spots have been saved */}
+                    {recentSpots.length === 0 && (
+                        <div>
+                          <p>No spots saved yet. Let's add one together!</p>
+                          <Link to="/add" className="font-bold text-rosewood">Add a spot</Link>
+                        </div>
+                      )}
                     {!loading && !error && (
                         <div className="flex flex-col gap-3">
                             {recentSpots.map(spot => <SpotCard key={spot.id} spot={spot} onDelete={(id) => setSpots(prev => prev.filter(s => s.id !== id))} />)}

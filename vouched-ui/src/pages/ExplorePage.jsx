@@ -4,6 +4,7 @@ import SpotCard from "../components/SpotCard";
 import { searchUser } from "../api/user";
 import { sendFriendRequest } from "../api/friendships";
 import SpotsMap from "../components/SpotsMap";
+import { Link } from "react-router-dom";
 
 
 function ExplorePage() {
@@ -106,6 +107,13 @@ function ExplorePage() {
       {loading && <p>Loading...</p>}
       {error && <p className="text-brick text-sm">{error}</p>}
 
+      {!loading && !error && searchMode === "spots" && filteredSpots.length === 0 && (
+        <div>
+          <p>No spots saved yet. Let's add one together!</p>
+          <Link to="/add" className="font-bold text-rosewood">Add a spot</Link>
+          </div>
+      )}
+
       {/* map view */}
       {!loading && !error && viewMode === "map" && (
           <div className="h-screen">
@@ -121,6 +129,12 @@ function ExplorePage() {
       )}
 
       {/* list view + friends view  */}
+      {!loading && !error && searchMode === "friends" && friendResults.length === 0 && (
+        <div className="text-center">
+          <p>Let's find some trusted sources, together. Search here for friends.</p>
+          </div>
+      )}
+
       {!loading && !error && viewMode=== "list" && searchMode === "friends" && (
         <div className="flex flex-col gap-3">
           {friendResults.map(user => (
