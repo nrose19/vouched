@@ -1,0 +1,56 @@
+# [AI created 27/08/2026 -- created for Render blueprint deployement]
+
+databases:
+  - name: vouched-db
+    plan: free
+    region: frankfurt
+
+services:
+  - type: web
+    runtime: docker
+    name: vouched-api
+    region: frankfurt
+    plan: free
+    rootDir: vouched-api
+    dockerfilePath: vouched-api/Dockerfile
+    dockerContext: vouched-api
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: vouched-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: vouched-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: vouched-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: vouched-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: vouched-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://vouched-ui.onrender.com
+
+  - type: web
+    runtime: static
+    name: vouched-ui
+    region: frankfurt
+    rootDir: vouched-ui
+    buildCommand: npm install && npm run build
+    staticPublishPath: vouched-ui/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://vouched-api.onrender.com/api
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
