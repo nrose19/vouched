@@ -3,7 +3,7 @@ import logo from '../assets/navbar_logo.png'; // Replace with your logo path
 // bouncing logo compent created by DevTools Tech (https://www.youtube.com/watch?v=E01XdDQgzDM&t=10s)
 function BouncingLogo({message}) {
   return (
-    <div className="fixed inset-0 items-center bg-paper flex justify-centerflex-col z-9999">
+    <div className="fixed inset-0 items-center bg-paper flex justify-center flex-col z-9999">
         <img src={logo} className="w-20 h-20 animate-logo-bounce" />
         {message && (
             <p className='font-logo text-ink mt-4 text-lg'>{message}</p>
