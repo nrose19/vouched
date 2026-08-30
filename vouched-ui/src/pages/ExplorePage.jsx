@@ -135,7 +135,7 @@ function ExplorePage() {
       {error && <p className="text-brick text-sm">{error}</p>}
 
       <div className="grid grid-cols-[200px_1fr] gap-4 mt-6">
-              {viewMode === "map" && searchMode === "spots" ? (
+              {searchMode === "spots" ? (
                 <FilterSidebar
                   categories={categories}
                   selectedCategories={selectedCategories}
