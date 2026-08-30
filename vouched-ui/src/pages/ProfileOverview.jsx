@@ -65,7 +65,7 @@ function ProfileOverview() {
               <div className="relative">
                 <div ref={myScrollRef} className="flex gap-3 overflow-x-auto pb-2 scroll-smooth">
                   {friendsRecentSpots.map(spot => (
-                    <div key={spot.id} className="shrink-0 w-40">
+                    <div key={spot.id} className="shrink-0 w-70">
                       <SpotCard key={spot.id} spot={spot} onDelete={(id) => setSpots(prev => prev.filter(s => s.id !== id))} />
                     </div>
                   ))}

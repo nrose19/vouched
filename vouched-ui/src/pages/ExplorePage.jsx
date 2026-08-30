@@ -173,11 +173,8 @@ function ExplorePage() {
                   </div>
                 )}
 
-                
-              </div>
-
-              {/* list view + friends view  */}
-              {!loading && !error && searchMode === "friends" && friendResults.length === 0 && (
+                {/* list view + friends view  */}
+                {!loading && !error && searchMode === "friends" && friendResults.length === 0 && (
                   <div className="text-center">
                     <p>Let's find some trusted sources, together. Search here for friends.</p>
                     </div>
@@ -207,6 +204,7 @@ function ExplorePage() {
                     ))}
                   </div>
                 )}
+              </div>              
       </div>
     </div>
   )
