@@ -64,7 +64,7 @@ function LoginPage(){
                         className="border rounded-lg px-3 py-2"
                     />
                     {error && <p className="text-brick text-sm">{error}</p>}
-                    {loading && <BouncingLogo message="Logging in..."/>}
+                    {loading && <BouncingLogo message="Mapping your city..."/>}
                     <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
                         Login
                     </button>

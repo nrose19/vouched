@@ -6,7 +6,7 @@ function BouncingLogo({message}) {
     <div className="flex justify-center items-center h-screen bg-white">
         <img src={logo} className="w-20 h-20 animate-logo-bounce" />
         {message && (
-            <p className='font-display text-ink mt-4'>{message}</p>
+            <p className='font-logo text-ink mt-4 text-lg'>{message}</p>
         )}
     </div>
   );
