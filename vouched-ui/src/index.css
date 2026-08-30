@@ -11,10 +11,22 @@
   --font-logo: "Pacifico", cursive;
   --font-display: "Lilita One", sans-serif;
   --font-sans: "Quicksand", sans-serif;
+  
+  --animate-logo-bounce: logo-bounce 0.6s infinite alternate ease-in-out;
+
 }
 
 body {
   @apply bg-paper-light text-ink font-sans;
+}
+
+@keyframes logo-bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-20px);
+  }
 }
 
 button {

@@ -81,7 +81,7 @@ function HomePage(){
                     {loading && <p>Loading...</p>}
                     {error && <p>{error}</p>}
                     {/* if no spots have been saved */}
-                    {recentSpots.length === 0 && (
+                    {!loading && recentSpots.length === 0 && (
                         <div>
                           <p>No spots saved yet. Let's add one together!</p>
                           <Link to="/add" className="font-bold text-rosewood">Add a spot</Link>

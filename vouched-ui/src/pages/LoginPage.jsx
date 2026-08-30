@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
 import loginBg from "../assets/gla_image.jpg";
+import BouncingLogo from "../components/BouncingLogo";
 
 function LoginPage(){
     const navigate = useNavigate();
     const { login } = useAuth();
+    const [loading, setLoading] = useState(false);
 
     //formData state
     const [formData, setFormData] = useState({email:'', password:''})
@@ -22,6 +24,7 @@ function LoginPage(){
     //handle submit
     async function handleSubmit(e){
         e.preventDefault();
+        setLoading(true);
 
         try{
             const response = await loginUser(formData);
@@ -29,6 +32,8 @@ function LoginPage(){
             navigate('/');
         }catch (err){
             setError(err.response?.data?.message || "Login failed")
+        }finally{
+            setLoading(false);
         }
     }
 
@@ -59,6 +64,7 @@ function LoginPage(){
                         className="border rounded-lg px-3 py-2"
                     />
                     {error && <p className="text-brick text-sm">{error}</p>}
+                    {loading && <BouncingLogo message="Logging in..."/>}
                     <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
                         Login
                     </button>
