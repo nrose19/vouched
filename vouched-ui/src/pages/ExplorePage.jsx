@@ -161,7 +161,7 @@ function ExplorePage() {
 
                 {/* map view */}
                 {!loading && !error && viewMode === "map" && (
-                    <div className="h-600px w-full relative overflow-hidden rounded-xl">
+                    <div className="h-150 w-full relative overflow-hidden rounded-xl">
                         <SpotsMap spots={filteredSpots}/>
                     </div>
                 )}
