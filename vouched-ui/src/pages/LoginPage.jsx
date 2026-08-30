@@ -38,42 +38,46 @@ function LoginPage(){
     }
 
     return(
-    <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${loginBg})`}}>
-        <div className="absolute inset-0 bg-rosewood/60"/>
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="bg-paper/80 rounded-2xl p-15 w-full max-w-lg z-50">
-                <h1 className="text-rosewood text-7xl">Vouched</h1>
+    <>
+        {loading && <BouncingLogo message="Mapping your city..."/>}
+        <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${loginBg})`}}>
+            <div className="absolute inset-0 bg-rosewood/60"/>
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="bg-paper/80 rounded-2xl p-15 w-full max-w-lg z-50">
+                    <h1 className="text-rosewood text-7xl">Vouched</h1>
 
-                <form onSubmit={handleSubmit} className="flex text-lg flex-col gap-4">
-                    <input 
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        //value and onChange here
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="border rounded-lg px-3 py-2"
-                    />
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        //value and onChange here
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="border rounded-lg px-3 py-2"
-                    />
-                    {error && <p className="text-brick text-sm">{error}</p>}
-                    {loading && <BouncingLogo message="Mapping your city..."/>}
-                    <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
-                        Login
-                    </button>
-                    <a href="/register" className="text-center">Not a user? Register now.</a>
-                </form>
-                
+                    <form onSubmit={handleSubmit} className="flex text-lg flex-col gap-4">
+                        <input 
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            //value and onChange here
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="border rounded-lg px-3 py-2"
+                        />
+                        <input
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            //value and onChange here
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="border rounded-lg px-3 py-2"
+                        />
+                        {error && <p className="text-brick text-sm">{error}</p>}
+
+                        <button type="submit" className="font-display bg-rosewood text-paper-light rounded-lg py-2">
+                            Login
+                        </button>
+                        <a href="/register" className="text-center">Not a user? Register now.</a>
+                    </form>
+                    
+                </div>
             </div>
         </div>
-    </div>
+    </>
+    
     )
 
 }
