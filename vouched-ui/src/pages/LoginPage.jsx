@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
 import loginBg from "../assets/gla_image.jpg";
-import BouncingLogo from "../components/BouncingLogo";
+import BouncingLogoBG from "../components/BouncingLogoBG";
 
 function LoginPage(){
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ function LoginPage(){
 
     return(
     <>
-        {loading && <BouncingLogo message="Mapping your city..."/>}
+        {loading && <BouncingLogoBG message="Mapping your city..."/>}
         <div className="min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${loginBg})`}}>
             <div className="absolute inset-0 bg-rosewood/60"/>
             <div className="min-h-screen flex items-center justify-center">

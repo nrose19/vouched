@@ -9,6 +9,7 @@ import FilterSidebar from "../components/FilterSideBar";
 import { toggleInSet } from "../utils/toggleInSet";
 import { filterSpots } from "../utils/filterSpots";
 import { Link } from "react-router-dom";
+import LoadingLogo from "../components/LoadingLogo";
 
 function HomePage(){
     const { user } = useAuth();
@@ -78,7 +79,7 @@ function HomePage(){
                 {/* recent spots, middle section of page */}
                 <div className="bg-paper rounded-xl p-4 max-h-185 overflow-y-auto h-full">
                     <h2 className="font-display text-lg mb-3">Recent Spots</h2>
-                    {loading && <p>Loading...</p>}
+                    {loading && <LoadingLogo message="Recent Spots Loading..." />}
                     {error && <p>{error}</p>}
                     {/* if no spots have been saved */}
                     {!loading && recentSpots.length === 0 && (

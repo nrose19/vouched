@@ -10,6 +10,7 @@ import { useAuth } from "../context/AuthContext";
 import { getMyFriends } from "../api/friendships";
 import { toggleInSet } from "../utils/toggleInSet";
 import { filterSpots } from "../utils/filterSpots";
+import LoadingLogo from "../components/LoadingLogo";
 
 function ExplorePage() {
   const [spots, setSpots] = useState([]);
@@ -129,11 +130,12 @@ function ExplorePage() {
         <button type="submit" className="bg-rosewood text-paper-light px-4 rounded-lg cursor-pointer">Search</button>
       </form>
         
-      {loading && <p>Loading...</p>}
+      {loading && searchMode=="spots" && <LoadingLogo message="Spots Loading..."/>}
+      {loading && searchMode=="friends" && <LoadingLogo message="Friends Loading..."/>}
       {error && <p className="text-brick text-sm">{error}</p>}
 
       <div className="grid grid-cols-[200px_1fr] gap-4 mt-6">
-              {searchMode === "spots" ? (
+              {viewMode === "map" && searchMode === "spots" ? (
                 <FilterSidebar
                   categories={categories}
                   selectedCategories={selectedCategories}
@@ -171,8 +173,11 @@ function ExplorePage() {
                   </div>
                 )}
 
-                {/* list view + friends view  */}
-                {!loading && !error && searchMode === "friends" && friendResults.length === 0 && (
+                
+              </div>
+
+              {/* list view + friends view  */}
+              {!loading && !error && searchMode === "friends" && friendResults.length === 0 && (
                   <div className="text-center">
                     <p>Let's find some trusted sources, together. Search here for friends.</p>
                     </div>
@@ -202,8 +207,6 @@ function ExplorePage() {
                     ))}
                   </div>
                 )}
-
-              </div>
       </div>
     </div>
   )

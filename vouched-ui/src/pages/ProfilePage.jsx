@@ -3,7 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getSpots } from "../api/spots";
 import { getMyFriends } from "../api/friendships";
-
+import LoadingLogo from "../components/LoadingLogo";
 
 
 function ProfilePage() {
@@ -52,7 +52,7 @@ function ProfilePage() {
         </div>
       </div>
         
-      {loading && <p>Loading...</p>}
+      {loading && <LoadingLogo message="Loading..."/>}
       {error && <p className="text-brick text-sm">{error}</p>}
 
       {!loading && !error && <Outlet context={{ spots, following: friends, user }}/>}
