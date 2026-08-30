@@ -14,7 +14,7 @@ function MapViewPage() {
     const [savedByFilter, setSavedByFilter] = useState("all"); //all, friends, or me -- further development (filter by specific friend)
 
     const friendIds = new Set(following.map(f => f.friendUserId));
-    const categories = ["CAFE", "RESTAURANT", "BAR", "PUB", "SALON", "SHOP", "GYM", "GALLERY", "PARK", "MARKET", "CINEMA", "MUSIC_VENUE", "OTHER"];
+    const categories = ["CAFE", "RESTAURANT", "BAR", "WINE_BAR", "PUB", "SALON", "SHOP", "GYM", "GALLERY", "PARK", "MARKET", "CINEMA", "MUSIC_VENUE", "OTHER"];
 
     const filteredSpots = filterSpots(spots, {
         selectedCategories,

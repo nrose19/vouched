@@ -28,7 +28,7 @@ function HomePage(){
 
 
     const friendIds = new Set(friends.map(f => f.friendUserId));
-    const categories = ["CAFE", "RESTAURANT", "BAR", "PUB", "SALON", "SHOP", "GYM", "GALLERY", "PARK", "MARKET", "CINEMA", "MUSIC_VENUE", "OTHER"];
+    const categories = ["CAFE", "RESTAURANT", "BAR", "WINE_BAR", "PUB", "SALON", "SHOP", "GYM", "GALLERY", "PARK", "MARKET", "CINEMA", "MUSIC_VENUE", "OTHER"];
     const filteredForDashboard = filterSpots(spots, { selectedCategories, selectedPrivacy, savedByFilter, selectedStatus, userId: user.id, friendIds });
     
     //get spots - use effect runs once on mount
