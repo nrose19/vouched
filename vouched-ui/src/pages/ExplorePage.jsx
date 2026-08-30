@@ -35,9 +35,9 @@ function ExplorePage() {
     async function fetchData(){
       try{
         const spotResults = await getSpots();
-        const friendResults = await getMyFriends();
+        const friendsResults = await getMyFriends();
         setSpots(spotResults.data);
-        setFriends(friendResults.data);
+        setFriends(friendsResults.data);
       } catch (err){
         setError('Unable to find spots.');
       } finally{
@@ -161,7 +161,7 @@ function ExplorePage() {
 
                 {/* map view */}
                 {!loading && !error && viewMode === "map" && (
-                    <div className="h-screen">
+                    <div className="h-600px w-full relative overflow-hidden rounded-xl">
                         <SpotsMap spots={filteredSpots}/>
                     </div>
                 )}
