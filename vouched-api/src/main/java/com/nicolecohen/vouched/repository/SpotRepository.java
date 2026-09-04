@@ -20,6 +20,7 @@ public interface SpotRepository extends JpaRepository<Spot, UUID> {
 
     List<Spot> findByCityAndCategory(String city, String category);
 
+//    AI assisted
     @Query("""
         SELECT s.ownerId, COUNT(s)
         FROM Spot s

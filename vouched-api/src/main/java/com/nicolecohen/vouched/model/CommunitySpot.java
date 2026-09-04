@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+//OUT OF MVP -- SCALED BACK -- WILL NOT COMPLETE FOR DISSERTATION
 @Entity
 @Table(name = "community_spots", uniqueConstraints = @UniqueConstraint(
         columnNames = {"community_id", "spot_id"}

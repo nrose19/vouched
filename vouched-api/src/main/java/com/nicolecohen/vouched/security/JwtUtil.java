@@ -9,18 +9,25 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
+//AI assistance
 @Component
 public class JwtUtil {
+
+    //would normally never be hardcoded - ok for scope of dissertation
+    private static final String SECRET =
+            "vouchedSuperSecretKeyForJwtSigningMustBe256BitsLong!!";
+
+    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     //[AI created 27/08 -- to help with Render deployment of application,
     // adjusting JWT secret key, rather than hard coding it]
     private static final long EXPIRY_MS = 86400000;
 
-    private final Key key;
+//    private final Key key;
 
-    public JwtUtil(@Value("${jwt.secret}") String secret) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-    }
+//    public JwtUtil(@Value("${jwt.secret}") String secret) {
+//        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+//    }
 
 
     //JWT builder

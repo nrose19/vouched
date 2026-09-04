@@ -14,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+//Heavy AI assistance with own code integrated
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 

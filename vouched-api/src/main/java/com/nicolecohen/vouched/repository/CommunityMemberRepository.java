@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.List;
 import java.util.UUID;
 
+//OUT OF MVP -- SCALED BACK -- WILL NOT COMPLETE FOR DISSERTATION
 @Repository
 public interface CommunityMemberRepository extends JpaRepository<CommunityMember, UUID>{
 

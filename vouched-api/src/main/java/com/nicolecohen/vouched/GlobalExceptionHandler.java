@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
+//AI assisted
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

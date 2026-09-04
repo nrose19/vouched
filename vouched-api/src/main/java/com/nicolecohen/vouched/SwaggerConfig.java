@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
+//AI created -- needed help being authorized for swagger UI testing
 @Configuration
 @OpenAPIDefinition(
         info = @Info(

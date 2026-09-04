@@ -8,6 +8,7 @@ import BouncingLogoBG from "../components/BouncingLogoBG";
 function RegisterPage(){
     const navigate = useNavigate();
     const { login } = useAuth();
+    const [loading, setLoading] = useState(false);
 
     //form state
     const [formData, setFormData] = useState({ displayName: '', email: '', password: '' })
@@ -33,6 +34,8 @@ function RegisterPage(){
             navigate('/');
         } catch (err){
             setError(err.response?.data?.message || "Registration failed")
+        } finally {
+            setLoading(false);
         }
     
     }

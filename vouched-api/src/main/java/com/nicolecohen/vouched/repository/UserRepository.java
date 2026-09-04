@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByEmail(String email);
 
+//    AI assisted
     @Query("""
         SELECT u FROM User u
         WHERE LOWER(u.displayName) LIKE LOWER(CONCAT('%', :query, '%'))

@@ -24,6 +24,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, UUID>{
             User requester, FriendshipStatus status
     );
 
+    //    AI assisted
     //need unique queries for the both direction friendship check...too complex for Spring Data's derived method names
     @Query("""
         SELECT f FROM Friendship f
@@ -34,7 +35,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, UUID>{
             @Param("user") User user,
             @Param("status") FriendshipStatus status
     );
-
+    //    AI assisted
     @Query("""
         SELECT f FROM Friendship f
         WHERE (f.requester = :userA AND f.addressee = :userB)
